@@ -1,17 +1,17 @@
 provider "aws" {
-  region = "{{ .Region }}"
+  region = "{{ .Resources.Region }}"
 }
 
-{{ range .Compute }} 
+{{ range .Resources.Compute }} 
 module "compute-{{ .Slug }}" {
- source = "{{ $.ProviderPath }}/compute" 
- region = "{{ $.Region }}"
+ source = "{{ $.Path }}/compute" 
+ region = "{{ $.Resources.Region }}"
  name = "micorun-{{ .Slug }}"
  instance_type = "{{ .InstanceType }}"
  user_data = "{{ .UserData }}"
 }
 
 output "compute-{{ .Slug }}-ip" {
- value = module."compute-{{ .Slug }}".ipv4
+ value = module.compute-{{ .Slug }}.ipv4
 }
 {{ end }}
