@@ -1,0 +1,17 @@
+provider "aws" {
+  region = "{{ .Region }}"
+}
+
+{{ range .Compute }} 
+module "compute-{{ .Slug }}" {
+ source = "{{ $.ProviderPath }}/compute" 
+ region = "{{ $.Region }}"
+ name = "micorun-{{ .Slug }}"
+ instance_type = "{{ .InstanceType }}"
+ user_data = "{{ .UserData }}"
+}
+
+output "compute-{{ .Slug }}-ip" {
+ value = module."compute-{{ .Slug }}".ipv4
+}
+{{ end }}
